@@ -1,38 +1,53 @@
+chrome.runtime.onInstalled.addListener(setupStorage);
 chrome.runtime.onMessage.addListener(handleMessage);
+
+function setupStorage(details) {
+	if(details.reason === "install") {
+		chrome.storage.local.set( { "queue": [], "sessions": [] });
+	}
+}
 
 function handleMessage(request, sender, sendResponse) {
 	switch(request.type) {
-		case "queue": queueCurrentTab();
-			break;
+		case "queue": queueHighlightedTabs();
+		break;
 		case "dequeue": loadFirstQueued();
+		break;
 	}
 }
 
-function queueCurrentTab() {
-	chrome.tabs.query({ "active": true }, queue)
+function queueHighlightedTabs() {
+	chrome.tabs.query({ "highlighted": true }, queueTabs)
 }
 
-function queue(tabs) {
-	if(tabs.length === 0) {
-		return;
+function queueTabs(tabs) {
+	var allUrls = [];
+	var allIds = [];
+
+	for(var i = 0; i < tabs.length; i++) {
+		allUrls.push(tabs[i].url);
+		allIds.push(tabs[i].id);
 	}
 
-	var activeTab = tabs[0];
+	chrome.tabs.remove(allIds);
+	addUrlsToQueue(allUrls);
+}
+
+function addUrlsToQueue(urls) {
 	chrome.storage.local.get("queue", function(objects) {
-		var newQueue = [];
-		if("queue" in objects) {
-			newQueue = objects.queue;
+		var newQueue = objects.queue;
+
+		for(var i = 0; i < urls.length; i++) {
+			newQueue.push(urls[i]);
 		}
-		newQueue.push(activeTab.url);
 
 		chrome.storage.local.set({ "queue": newQueue });
-		chrome.tabs.remove(activeTab.id);
 	});
 }
 
 function loadFirstQueued() {
 	chrome.storage.local.get("queue", function(objects) {
-		if("queue" in objects && objects.queue.length > 0) {
+		if(objects.queue.length > 0) {
 			var currentQueue = objects.queue;
 			var url = currentQueue.shift();
 

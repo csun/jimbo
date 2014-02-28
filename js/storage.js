@@ -1,6 +1,6 @@
 var storage = (function () {
 	function reset() {
-		chrome.storage.local.set( { "queue": [], "sessions": [] });
+		chrome.storage.local.set( { "queue": [], "sessions": {} });
 	}
 
 	function queueTabs(tabs) {
@@ -18,31 +18,48 @@ var storage = (function () {
 	}
 
 	function addToQueue(records) {
-		chrome.storage.local.get("queue", function(objects) {
-			var newQueue = objects.queue;
-
-			for(var i = 0; i < records.length; i++) {
-				newQueue.push(records[i]);
-			}
-
-			chrome.storage.local.set({ "queue": newQueue });
+		updateRecord("queue", function(result) {
+			return { "queue": result.queue.concat(records) }
 		});
 	}
 
 	function getFirstQueued(callback) {
-		chrome.storage.local.get("queue", function(objects) {
-			if(objects.queue.length > 0) {
-				var currentQueue = objects.queue;
-
-				callback(currentQueue.shift());
-				chrome.storage.local.set({ "queue": currentQueue });
+		updateRecord("queue", function(result){
+			if(result.queue.length > 0) {
+				callback(result.queue.shift());
 			}
+			return result;
+		});
+	}
+
+	function saveSession(name, tabs) {
+		updateRecord("sessions", function(result) {
+			result.sessions[name] = convertTabsToRecords(tabs);
+			return result;
+		});
+	}
+
+	function getSession(name, callback) {
+		chrome.storage.local.get("sessions", function(result) {
+			if(result.sessions[name] === undefined) {
+				callback(null);
+				return;
+			}
+			callback(result.sessions[name]);
+		});
+	}
+
+	function updateRecord(key, updateFunction) {
+		chrome.storage.local.get(key, function(result) {
+			chrome.storage.local.set(updateFunction(result));
 		});
 	}
 
 	return {
 		"reset": reset,
 		"queueTabs": queueTabs,
-		"getFirstQueued": getFirstQueued
+		"getFirstQueued": getFirstQueued,
+		"saveSession": saveSession,
+		"getSession": getSession
 	}
 })();

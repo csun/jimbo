@@ -13,20 +13,33 @@ var tabManager = (function () {
 		chrome.tabs.remove(idArray);
 	}
 
-	function openStoredTabs(stored) {
-		if(!(stored instanceof Array)) {
-			TabRecord.open(stored);
+	function openTabRecords(records) {
+		if(!(records instanceof Array)) {
+			TabRecord.open(records);
 			return;
 		}
 
-		for(var i = 0; i < stored.length; i++) {
-			TabRecord.open(stored[i]);
+		for(var i = 0; i < records.length; i++) {
+			TabRecord.open(records[i]);
 		}
+	}
+
+	function getCurrentSessionTabs(callback) {
+		chrome.tabs.query({ "currentWindow": true }, callback);
+	}
+
+	function replaceCurrentSession(newSession) {
+		chrome.tabs.query({ "currentWindow": true }, function(tabs) {
+			openTabRecords(newSession);
+			removeTabs(tabs);
+		});
 	}
 
 	return { 
 		"getHighlightedTabs": getHighlightedTabs,
 		"removeTabs": removeTabs,
-		"openStoredTabs": openStoredTabs
+		"openTabRecords": openTabRecords,
+		"getCurrentSessionTabs": getCurrentSessionTabs,
+		"replaceCurrentSession": replaceCurrentSession
 	}
 })();

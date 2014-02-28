@@ -13,6 +13,10 @@ function handleMessage(request, sender, sendResponse) {
 		break;
 		case "dequeue": openFirstQueued();
 		break;
+		case "saveSession": saveSession(request.name);
+		break;
+		case "loadSession": loadSession(request.name);
+		break;
 	}
 }
 
@@ -22,5 +26,19 @@ function queueTabs(tabs) {
 }
 
 function openFirstQueued() {
-	storage.getFirstQueued(tabManager.openStoredTabs);
+	storage.getFirstQueued(tabManager.openTabRecords);
+}
+
+function saveSession(name) {
+	tabManager.getCurrentSessionTabs(function(tabs) {
+		storage.saveSession(name, tabs);
+	});
+}
+
+function loadSession(name) {
+	storage.getSession(name, function(session) {
+		if(session !== null) {
+			tabManager.replaceCurrentSession(session);
+		}
+	});
 }

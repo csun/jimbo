@@ -1,7 +1,7 @@
 var omniboxManager = (function () {
 	var ACTION_FUNCTION_MAPPINGS = {
-		"save": saveSession,
-		"load": loadSession
+		"save": { "func": saveSession, "numArgs": 1 },
+		"load": { "func": loadSession, "numArgs": 1 }
 	}
 
 	function handleInput(text, disposition) {
@@ -9,8 +9,10 @@ var omniboxManager = (function () {
 	}
 
 	function handleCommand(command) {
-		actionFunction = ACTION_FUNCTION_MAPPINGS[command.action];
-		actionFunction.apply(null, command.args);
+		var afm = ACTION_FUNCTION_MAPPINGS[command.action];
+		if(afm !== undefined && afm.numArgs === command.args.length) {
+			afm.func.apply(null, afm.args);
+		}
 	}
 
 	function saveSession(name) {

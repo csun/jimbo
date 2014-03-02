@@ -10,7 +10,7 @@ var omniboxManager = (function () {
 
 	function handleCommand(command) {
 		var afm = ACTION_FUNCTION_MAPPINGS[command.action];
-		if(afm !== undefined && afm.numArgs === command.args.length) {
+		if(afm !== undefined && afm.numArgs === command.numArgs) {
 			afm.func.apply(null, afm.args);
 		}
 	}

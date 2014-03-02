@@ -1,5 +1,6 @@
 chrome.runtime.onInstalled.addListener(setupStorage);
 chrome.runtime.onMessage.addListener(handleMessage);
+chrome.omnibox.onInputEntered.addListener(omniboxManager.handleInput);
 
 function setupStorage(details) {
 	if(details.reason === "install") {

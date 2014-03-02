@@ -1,27 +1,27 @@
 window.onload = function() {
     document.getElementById("queue").onclick = function() {
         chrome.extension.sendMessage({
-            type: "queue"
+            "type": "queue"
         });
     }
 
     document.getElementById("dequeue").onclick = function() {
         chrome.extension.sendMessage({
-            type: "dequeue"
+            "type": "dequeue"
         });
     }
 
     document.getElementById("saveSession").onclick = function() {
         chrome.extension.sendMessage({
-            type: "saveSession",
-            name: document.getElementById("sessionName").value
+            "type": "saveSession",
+            "name": document.getElementById("sessionName").value
         });
     }
 
     document.getElementById("loadSession").onclick = function() {
         chrome.extension.sendMessage({
-            type: "loadSession",
-            name: document.getElementById("sessionName").value
+            "type": "loadSession",
+            "name": document.getElementById("sessionName").value
         });
     }
 }

@@ -5,6 +5,8 @@
   "description": "The tab manager I've always wanted for chrome",
   "version": "0.0",
 
+  "omnibox": { "keyword": "jim" },
+
   "permissions": [
     "storage",
     "tabs"
@@ -13,8 +15,10 @@
   "background": {
     "scripts": [
       "js/TabRecord.js",
+      "js/OmniboxCommand.js",
       "js/storage.js",
       "js/tabManager.js",
+      "js/omniboxManager.js",
       "js/background.js"
     ],
 

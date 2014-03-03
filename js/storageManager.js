@@ -1,4 +1,4 @@
-var storage = (function () {
+var storageManager = (function () {
 	function reset() {
 		chrome.storage.local.set( { "queue": [], "sessions": {} });
 	}

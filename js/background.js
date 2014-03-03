@@ -4,7 +4,7 @@ chrome.omnibox.onInputEntered.addListener(omniboxManager.handleInput);
 
 function setupStorage(details) {
 	if(details.reason === "install") {
-		storage.reset();
+		storageManager.reset();
 	}
 }
 
@@ -22,22 +22,22 @@ function handleMessage(request, sender, sendResponse) {
 }
 
 function queueTabs(tabs) {
-	storage.queueTabs(tabs);
+	storageManager.queueTabs(tabs);
 	tabManager.removeTabs(tabs);
 }
 
 function openFirstQueued() {
-	storage.getFirstQueued(tabManager.openTabRecords);
+	storageManager.getFirstQueued(tabManager.openTabRecords);
 }
 
 function saveSession(name) {
 	tabManager.getCurrentSessionTabs(function(tabs) {
-		storage.saveSession(name, tabs);
+		storageManager.saveSession(name, tabs);
 	});
 }
 
 function loadSession(name) {
-	storage.getSession(name, function(session) {
+	storageManager.getSession(name, function(session) {
 		if(session !== null) {
 			tabManager.replaceCurrentSession(session);
 		}

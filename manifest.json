@@ -16,7 +16,7 @@
     "scripts": [
       "js/TabRecord.js",
       "js/OmniboxCommand.js",
-      "js/storage.js",
+      "js/storageManager.js",
       "js/tabManager.js",
       "js/omniboxManager.js",
       "js/background.js"

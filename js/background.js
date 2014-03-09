@@ -1,45 +1,43 @@
 chrome.runtime.onInstalled.addListener(setupStorage);
 chrome.runtime.onMessage.addListener(handleMessage);
-chrome.omnibox.onInputEntered.addListener(omniboxManager.handleInput);
+chrome.omnibox.onInputEntered.addListener(jimbo.omnibox.handleInput);
 
 function setupStorage(details) {
 	if(details.reason === "install") {
-		storageManager.reset();
+		jimbo.storage.reset();
 	}
 }
 
 function handleMessage(request, sender, sendResponse) {
 	switch(request.type) {
-		case "queue": tabManager.getHighlightedTabs(queueTabs);
+		case "save": save();
+		break; 
+		case "saveAs": saveAs(request.name);
 		break;
-		case "dequeue": openFirstQueued();
+		case "load": load(request.name);
 		break;
-		case "saveSession": saveSession(request.name);
-		break;
-		case "loadSession": loadSession(request.name);
-		break;
+		case "new": newSession();
 	}
 }
 
-function queueTabs(tabs) {
-	storageManager.queueTabs(tabs);
-	tabManager.removeTabs(tabs);
+function save() {
+	jimbo.session.save();
 }
 
-function openFirstQueued() {
-	storageManager.getFirstQueued(tabManager.openTabRecords);
-}
-
-function saveSession(name) {
-	tabManager.getCurrentSessionTabs(function(tabs) {
-		storageManager.saveSession(name, tabs);
+function saveAs(name) {
+	jimbo.session.saveAs(name, function() {
+		jimbo.session.setCurrentName(name);
 	});
 }
 
-function loadSession(name) {
-	storageManager.getSession(name, function(session) {
-		if(session !== null) {
-			tabManager.replaceCurrentSession(session);
-		}
+function load(name) {
+	jimbo.session.save(function() {
+		jimbo.session.load(name);
+	});
+}
+
+function newSession() {
+	jimbo.session.save(function() {
+		jimbo.session.startNew();
 	});
 }

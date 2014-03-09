@@ -14,11 +14,13 @@
 
   "background": {
     "scripts": [
-      "js/TabRecord.js",
       "js/OmniboxCommand.js",
-      "js/storageManager.js",
-      "js/tabManager.js",
-      "js/omniboxManager.js",
+      "js/omnibox.js",
+      "js/Tab.js",
+      "js/TabList.js",
+      "js/storage.js",
+      "js/window.js",
+      "js/session.js",
       "js/background.js"
     ],
 

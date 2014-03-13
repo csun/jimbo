@@ -13,6 +13,10 @@ jimbo.window = (function() {
 		jimbo.TabList.openAll(tabs);
 	}
 
+	function addTab(tab) {
+		jimbo.Tab.open(tab);
+	}
+
 	/**
 	* loadTabs(Tab or TabList tabs)
 	* Replace all tabs in the window with the given tabs
@@ -54,6 +58,7 @@ jimbo.window = (function() {
 
 	return {
 		"addTabs": addTabs,
+		"addTab": addTab,
 		"loadTabs": loadTabs,
 		"getAllTabs": getAllTabs,
 		"getHighlightedTabs": getHighlightedTabs,

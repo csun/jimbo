@@ -14,7 +14,7 @@ jimbo.queue = (function() {
 
 	function loadFirstTab() {
 		jimbo.storage.dequeueFirstTab(function(tab) {
-			jimbo.window.addTabs(tab);
+			jimbo.window.addTab(tab);
 		});
 	}
 

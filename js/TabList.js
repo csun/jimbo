@@ -40,7 +40,7 @@ jimbo.TabList = (function() {
 	}
 
 	TabList.concat = function(tabList, otherTabs) {
-		tabList.tabs = tabList.tabs.concat(otherTabs);
+		tabList.tabs = tabList.tabs.concat(otherTabs.tabs);
 	}
 
 	TabList.shift = function(tabList) {

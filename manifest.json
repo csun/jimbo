@@ -21,6 +21,7 @@
       "js/storage.js",
       "js/window.js",
       "js/session.js",
+      "js/queue.js",
       "js/background.js"
     ],
 

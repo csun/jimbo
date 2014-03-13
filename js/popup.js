@@ -10,18 +10,4 @@ window.onload = function() {
             "type": "dequeue"
         });
     }
-
-    document.getElementById("saveSession").onclick = function() {
-        chrome.extension.sendMessage({
-            "type": "saveSession",
-            "name": document.getElementById("sessionName").value
-        });
-    }
-
-    document.getElementById("loadSession").onclick = function() {
-        chrome.extension.sendMessage({
-            "type": "loadSession",
-            "name": document.getElementById("sessionName").value
-        });
-    }
 }

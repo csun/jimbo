@@ -11,6 +11,9 @@ jimbo.storage = (function() {
 	**/
 	function reset() {
 		setStoredObject("sessions", {});
+
+		setStoredObject("queue", {});
+		setStoredObjectProperty("queue", "tabs", new jimbo.TabList());
 	}
 
 	/**
@@ -27,6 +30,20 @@ jimbo.storage = (function() {
 	**/
 	function getSessionTabList(name, callback) {
 		getStoredObjectProperty("sessions", name, callback);
+	}
+
+	function addTabListToQueue(tabs) {
+		getStoredObjectProperty("queue", "tabs", function(currentTabs) {
+			jimbo.TabList.concat(currentTabs, tabs);
+			setStoredObjectProperty("queue", "tabs", currentTabs);
+		});
+	}
+
+	function dequeueFirstTab(callback) {
+		getStoredObjectProperty("queue", "tabs", function(tabs) {
+			callback(jimbo.TabList.shift(tabs));
+			setStoredObjectProperty("queue", "tabs", tabs);
+		});
 	}
 
 	/**
@@ -81,13 +98,15 @@ jimbo.storage = (function() {
 	function setStoredObject(name, newValue, callback) {
 		var obj = {};
 		obj[name] = newValue;
-			
+
 		chrome.storage.local.set(obj, callback);
 	}
 
 	return {
 		"reset": reset,
 		"saveSessionTabList": saveSessionTabList,
-		"getSessionTabList": getSessionTabList
+		"getSessionTabList": getSessionTabList,
+		"addTabListToQueue": addTabListToQueue,
+		"dequeueFirstTab": dequeueFirstTab
 	}
 })();

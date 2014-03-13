@@ -10,6 +10,7 @@ function setupStorage(details) {
 
 function handleMessage(request, sender, sendResponse) {
 	switch(request.type) {
+		// sessions
 		case "save": save();
 		break; 
 		case "saveAs": saveAs(request.name);
@@ -17,6 +18,12 @@ function handleMessage(request, sender, sendResponse) {
 		case "load": load(request.name);
 		break;
 		case "new": newSession();
+		break;
+		// queue
+		case "queue": jimbo.queue.queueHighlightedTabs();
+		break;
+		case "dequeue": jimbo.queue.loadFirstTab();
+		break;
 	}
 }
 

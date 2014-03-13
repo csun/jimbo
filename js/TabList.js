@@ -11,8 +11,11 @@ jimbo.TabList = (function() {
 	**/
 	function TabList(chromeTabs) {
 		this.tabs = [];
-		for(var i = 0; i < chromeTabs.length; i++) {
-			this.tabs.push(new jimbo.Tab(chromeTabs[i]));
+
+		if(chromeTabs !== undefined) {
+			for(var i = 0; i < chromeTabs.length; i++) {
+				this.tabs.push(new jimbo.Tab(chromeTabs[i]));
+			}
 		}
 	}
 
@@ -34,6 +37,14 @@ jimbo.TabList = (function() {
 		tabList.tabs.forEach(function(tab) {
 			jimbo.Tab.remove(tab);
 		});
+	}
+
+	TabList.concat = function(tabList, otherTabs) {
+		tabList.tabs = tabList.tabs.concat(otherTabs);
+	}
+
+	TabList.shift = function(tabList) {
+		return tabList.tabs.shift();
 	}
 
 	/**

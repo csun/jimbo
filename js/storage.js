@@ -2,7 +2,8 @@ var jimbo = jimbo || {};
 
 /**
 * storage
-* Deals with all stored data
+* Deals with all stored data. TabLists are stored as
+* arrays, then converted later.
 **/
 jimbo.storage = (function() {
 	/**
@@ -11,9 +12,7 @@ jimbo.storage = (function() {
 	**/
 	function reset() {
 		setStoredObject("sessions", {});
-
-		setStoredObject("queue", {});
-		setStoredObjectProperty("queue", "tabs", new jimbo.TabList());
+		setStoredObject("queue", []);
 	}
 
 	/**
@@ -21,7 +20,7 @@ jimbo.storage = (function() {
 	* Store the given tabs under the given name and call callback when done
 	**/
 	function saveSessionTabList(name, tabs, callback) {
-		setStoredObjectProperty("sessions", name, tabs, callback);
+		setStoredObjectProperty("sessions", name, tabs.toStoreableArray(), callback);
 	}
 
 	/**
@@ -29,19 +28,27 @@ jimbo.storage = (function() {
 	* Get the TabList stored under given name and give to callback
 	**/
 	function getSessionTabList(name, callback) {
-		getStoredObjectProperty("sessions", name, callback);
+		getStoredObjectProperty("sessions", name, function(tabsArray) {
+			var tabList = new jimbo.TabList();
+			tabList.fromStoredArray(tabsArray);
+
+			callback(tabList);
+		});
 	}
 
-	function addTabListToQueue(tabs) {
-		getStoredObjectProperty("queue", "tabs", function(currentTabs) {
-			jimbo.TabList.concat(currentTabs, tabs);
-			setStoredObjectProperty("queue", "tabs", currentTabs);
+	function addTabListToQueue(newTabs) {
+		getStoredObject("queue", function(currentTabsArray) {
+			var newTabsArray = currentTabsArray.concat(newTabs.toStoreableArray());
+			setStoredObject("queue", newTabsArray);
 		});
 	}
 
 	function dequeueFirstTab(callback) {
-		getStoredObjectProperty("queue", "tabs", function(tabs) {
-			callback(jimbo.TabList.shift(tabs));
+		getStoredObject("queue", function(tabsArray) {
+			var firstTab = new jimbo.Tab();
+			firstTab.fromStoredData(tabsArray.shift());
+
+			callback(firstTab);
 			setStoredObjectProperty("queue", "tabs", tabs);
 		});
 	}
@@ -83,9 +90,6 @@ jimbo.storage = (function() {
 		chrome.storage.local.get(name, function(results) {
 			if(results[name] !== undefined) {
 				callback(results[name]);
-			}
-			else {
-				callback({});
 			}
 		});
 	}

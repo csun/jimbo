@@ -6,15 +6,11 @@ var jimbo = jimbo || {};
 **/
 jimbo.window = (function() {
 	/**
-	* addTabs(TabList tabs)
+	* addTabs(TabList or Tab tabs)
 	* Add all of the given tabs to the window
 	**/
 	function addTabs(tabs) {
-		jimbo.TabList.openAll(tabs);
-	}
-
-	function addTab(tab) {
-		jimbo.Tab.open(tab);
+		tabs.open();
 	}
 
 	/**
@@ -34,7 +30,8 @@ jimbo.window = (function() {
 	**/
 	function getAllTabs(callback) {
 		chrome.tabs.query({ "currentWindow": true }, function(tabs) {
-			callback(new jimbo.TabList(tabs));
+			var tl = new jimbo.TabList(tabs);
+			callback(tl);
 		});
 	}
 
@@ -49,16 +46,15 @@ jimbo.window = (function() {
 	}
 	
 	/**
-	* removeTabs(TabList tabs)
+	* removeTabs(TabList or Tab tabs)
 	* Remove all given tabs from window
 	**/
 	function removeTabs(tabs) {
-		jimbo.TabList.removeAll(tabs);
+		tabs.remove();
 	}
 
 	return {
 		"addTabs": addTabs,
-		"addTab": addTab,
 		"loadTabs": loadTabs,
 		"getAllTabs": getAllTabs,
 		"getHighlightedTabs": getHighlightedTabs,

@@ -10,35 +10,57 @@ jimbo.Tab = (function() {
 	* Create a Tab based on a chrome representation of a Tab
 	**/
 	function Tab(chromeTab) {
-		this.id = chromeTab.id;
-		this.url = chromeTab.url;
-		this.title = chromeTab.title;
-		this.pinned = chromeTab.pinned;
+		this.data = {};
+
+		if(chromeTab !== undefined) {
+			this.data = {
+				"id": chromeTab.id,
+				"url": chromeTab.url,
+				"title": chromeTab.title,
+				"pinned": chromeTab.pinned,
+			}
+		}
+
+		this.open = open;
+		this.remove = remove;
+		this.toStoreableData = toStoreableData;
+		this.fromStoredData = fromStoredData;
 	}
 
 	/**
-	* Tab.open(Tab tab)
+	* open()
 	* Open the given tab in the current window
 	**/
-	Tab.open = function(tab) {
-		chrome.tabs.create({ "url": tab.url, "pinned": tab.pinned });
+	function open() {
+		chrome.tabs.create({
+			"url": this.data.url,
+			"pinned": this.data.pinned
+		});
 	}
 
 	/**
-	* Tab.remove(Tab tab)
+	* remove()
 	* If the given tab exists in current window, remove it
-	*
-	* WARNING - Behavior not guaranteed for stored tabs that no
-	* longer exist
 	**/
-	Tab.remove = function(tab) {
-		chrome.tabs.remove(tab.id);
+	function remove() {
+		if(this.data.id !== undefined) {
+			chrome.tabs.remove(this.data.id);
+		}
+	}
+
+	function toStoreableData() {
+		this.data.id = undefined;
+		return this.data;
+	}
+
+	function fromStoredData(storedData) {
+		this.data = storedData;
 	}
 
 	/**
 	* An empty Tab
 	**/
-	Tab.NEW_TAB = { "url": "chrome://newtab" };
+	Tab.NEW_TAB = new Tab({ "url": "chrome://newtab" });
 
 	return Tab;
 })();

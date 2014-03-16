@@ -14,7 +14,7 @@ jimbo.session = (function() {
 	**/
 	function startNew() {
 		setCurrentName(NEW_SESSION_NAME);
-		jimbo.window.loadTabs(jimbo.TabList.NEW_TAB_LIST);
+		jimbo.window.loadTabs(jimbo.Tab.NEW_TAB);
 	}
 
 	/**

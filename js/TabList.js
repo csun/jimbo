@@ -17,40 +17,59 @@ jimbo.TabList = (function() {
 				this.tabs.push(new jimbo.Tab(chromeTabs[i]));
 			}
 		}
+
+		this.open = open;
+		this.remove = remove;
+		this.toStoreableArray = toStoreableArray ;
+		this.fromStoredArray = fromStoredArray;
 	}
 
 	/**
-	* TabList.openAll(TabList tabList)
-	* Open all Tabs in a given TabList
+	* open()
+	* Open all Tabs in this TabList
 	**/
-	TabList.openAll = function(tabList) {
-		tabList.tabs.forEach(function(tab) {
-			jimbo.Tab.open(tab);
+	function open() {
+		this.tabs.forEach(function(tab) {
+			tab.open();
 		});
 	}
 
 	/**
-	* TabList.removeAll(TabList tabList)
-	* Remove all Tabs in a given TabList
+	* remove()
+	* Remove all Tabs in this TabList
 	**/
-	TabList.removeAll = function(tabList) {
-		tabList.tabs.forEach(function(tab) {
-			jimbo.Tab.remove(tab);
+	function remove() {
+		this.tabs.forEach(function(tab) {
+			tab.remove();
 		});
 	}
 
-	TabList.concat = function(tabList, otherTabs) {
-		tabList.tabs = tabList.tabs.concat(otherTabs);
-	}
+	/**
+	* toStoreableArray()
+	* Returns an array of tab data for storage
+	**/
+	function toStoreableArray() {
+		var storeableArray = [];
+		this.tabs.forEach(function(tab) {
+			storeableArray.push(tab.toStoreableData());
+		});
 
-	TabList.shift = function(tabList) {
-		return tabList.tabs.shift();
+		return storeableArray;
 	}
 
 	/**
-	* The TabList with all Tabs for a new session
+	* fromeStoredArray(array of stored tab data tabArray)
+	* Load a stored array of tab data into this TabList
 	**/
-	TabList.NEW_TAB_LIST = { "tabs": [jimbo.Tab.NEW_TAB] };
+	function fromStoredArray(tabArray) {
+		this.tabs = [];
+		for(var i = 0; i < tabArray.length; i++){
+			var tab = new jimbo.Tab();
+			tab.fromStoredData(tabArray[i]);
+
+			this.tabs.push(tab);
+		}
+	}
 
 	return TabList;
 })();

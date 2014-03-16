@@ -44,6 +44,10 @@ jimbo.TabList = (function() {
 		});
 	}
 
+	/**
+	* toStoreableArray()
+	* Returns an array of tab data for storage
+	**/
 	function toStoreableArray() {
 		var storeableArray = [];
 		this.tabs.forEach(function(tab) {
@@ -53,6 +57,10 @@ jimbo.TabList = (function() {
 		return storeableArray;
 	}
 
+	/**
+	* fromeStoredArray(array of stored tab data tabArray)
+	* Load a stored array of tab data into this TabList
+	**/
 	function fromStoredArray(tabArray) {
 		this.tabs = [];
 		for(var i = 0; i < tabArray.length; i++){

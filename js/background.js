@@ -22,7 +22,7 @@ function handleMessage(request, sender, sendResponse) {
 		// queue
 		case "queue": jimbo.queue.queueHighlightedTabs();
 		break;
-		case "dequeue": jimbo.queue.loadFirstTab();
+		case "dequeue": jimbo.queue.openFirstTab();
 		break;
 	}
 }

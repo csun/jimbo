@@ -36,6 +36,10 @@ jimbo.storage = (function() {
 		});
 	}
 
+	/**
+	* addTabListToQueue(TabList newTabs)
+	* Store a TabList at the end of the current queue
+	**/
 	function addTabListToQueue(newTabs) {
 		getStoredObject("queue", function(currentTabsArray) {
 			var newTabsArray = currentTabsArray.concat(newTabs.toStoreableArray());
@@ -43,6 +47,11 @@ jimbo.storage = (function() {
 		});
 	}
 
+	/**
+	* dequeueFirstTab(function(Tab) callback)
+	* Remove the first Tab from the queue and give it to
+	* callback
+	**/
 	function dequeueFirstTab(callback) {
 		getStoredObject("queue", function(tabsArray) {
 			var firstTab = new jimbo.Tab();

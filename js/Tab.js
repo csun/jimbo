@@ -6,7 +6,7 @@ var jimbo = jimbo || {};
 **/
 jimbo.Tab = (function() {
 	/**
-	* Tab(chrome.tabs.Tab chromeTab)
+	* Tab(chrome.tabs.Tab chromeTab(optional))
 	* Create a Tab based on a chrome representation of a Tab
 	**/
 	function Tab(chromeTab) {
@@ -29,18 +29,20 @@ jimbo.Tab = (function() {
 
 	/**
 	* open()
-	* Open the given tab in the current window
+	* Open this tab in the current window
 	**/
 	function open() {
-		chrome.tabs.create({
-			"url": this.data.url,
-			"pinned": this.data.pinned
-		});
+		if(this.data.url !== undefined) {
+			chrome.tabs.create({
+				"url": this.data.url,
+				"pinned": this.data.pinned
+			});
+		}
 	}
 
 	/**
 	* remove()
-	* If the given tab exists in current window, remove it
+	* If this tab exists in current window, remove it
 	**/
 	function remove() {
 		if(this.data.id !== undefined) {
@@ -48,11 +50,19 @@ jimbo.Tab = (function() {
 		}
 	}
 
+	/**
+	* toStoreableData()
+	* Return an object representing this Tab for storage
+	**/
 	function toStoreableData() {
 		this.data.id = undefined;
 		return this.data;
 	}
 
+	/**
+	* fromStoredData(stored tab data storedData)
+	* Load stored tab data into this Tab
+	**/
 	function fromStoredData(storedData) {
 		this.data = storedData;
 	}

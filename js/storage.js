@@ -58,7 +58,7 @@ jimbo.storage = (function() {
 			firstTab.fromStoredData(tabsArray.shift());
 
 			callback(firstTab);
-			setStoredObjectProperty("queue", "tabs", tabs);
+			setStoredObject("queue", tabsArray);
 		});
 	}
 

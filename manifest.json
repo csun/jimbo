@@ -14,14 +14,14 @@
 
   "background": {
     "scripts": [
-      "js/OmniboxCommand.js",
-      "js/omnibox.js",
-      "js/Tab.js",
-      "js/TabList.js",
-      "js/storage.js",
-      "js/window.js",
-      "js/session.js",
-      "js/queue.js",
+      "js/modules/OmniboxCommand.js",
+      "js/modules/Tab.js",
+      "js/modules/TabList.js",
+      "js/modules/storage.js",
+      "js/modules/window.js",
+      "js/modules/session.js",
+      "js/modules/queue.js",
+      "js/modules/omnibox.js",
       "js/background.js"
     ],
 
